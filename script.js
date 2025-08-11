@@ -1,4 +1,4 @@
-// Scroll highlight (optional for scroll active nav)
+
 window.addEventListener("scroll", () => {
   const sections = document.querySelectorAll("section");
   const navLinks = document.querySelectorAll("nav a");
@@ -91,4 +91,65 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   typeWriter();
+});
+
+const images = document.querySelectorAll('.gallery img');
+const modal = document.getElementById('imageModal');
+const fullImage = document.getElementById('fullImage');
+const closeBtn = document.querySelector('.close');
+const prevBtn = document.querySelector('.prev');
+const nextBtn = document.querySelector('.next');
+
+let currentIndex = 0;
+
+// Open modal on image click
+images.forEach((img, index) => {
+  img.addEventListener('click', () => {
+    modal.style.display = 'block';
+    fullImage.src = img.src;
+    currentIndex = index;
+  });
+});
+
+// Close modal
+closeBtn.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+// Navigate previous
+prevBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent modal close
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  fullImage.src = images[currentIndex].src;
+});
+
+// Navigate next
+nextBtn.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent modal close
+  currentIndex = (currentIndex + 1) % images.length;
+  fullImage.src = images[currentIndex].src;
+});
+
+// Close when clicking outside image (but not arrows)
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+// Optional: Navigate with keyboard arrows
+document.addEventListener('keydown', (e) => {
+  if (modal.style.display === 'block') {
+    if (e.key === 'ArrowLeft') {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      fullImage.src = images[currentIndex].src;
+    }
+    if (e.key === 'ArrowRight') {
+      currentIndex = (currentIndex + 1) % images.length;
+      fullImage.src = images[currentIndex].src;
+    }
+    if (e.key === 'Escape') {
+      modal.style.display = 'none';
+    }
+  }
 });
